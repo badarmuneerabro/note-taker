@@ -15,9 +15,20 @@
   	<servlet-name>UpdateNoteServlet</servlet-name>
   	<servlet-class>com.badar.muneer.servlets.UpdateNoteServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>SearchServlet</display-name>
+  	<servlet-name>SearchServlet</servlet-name>
+  	<servlet-class>com.badar.muneer.servlets.SearchServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>UpdateNoteServlet</servlet-name>
   	<url-pattern>/update</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>SearchServlet</servlet-name>
+  	<url-pattern>/search</url-pattern>
   </servlet-mapping>
   <jsp-config>
   	<jsp-property-group>

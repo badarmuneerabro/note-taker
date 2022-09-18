@@ -17,7 +17,7 @@
 						<img class="card-img-top mx-auto" src="images/note-image.png"
 							alt="Card image cap">
 						<div class="card-body px-5">
-							<h5 class="card-title">${note.title }</h5>
+							<h5 class="card-title">${note.id}.${note.title }</h5>
 							<p class="card-text">${note.content }</p>
 							<p class="text-primary font-weight-bold">
 							written on: <time datetime="${note.addedDate }" >${note.addedDate }</time>
