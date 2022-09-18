@@ -1,6 +1,10 @@
 package com.badar.muneer.servlets;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +43,13 @@ public class NoteTakerServlet extends HttpServlet
 			addNote(request, response);
 			break;
 		case "view":
+			viewAllNotes(request, response);
+			break;
+		case "delete":
+			deleteNote(request, response);
+			break;
+		case "update":
+			updateNoteForm(request, response);
 			break;
 		default:
 			toHomePage(request, response);
@@ -76,12 +87,50 @@ public class NoteTakerServlet extends HttpServlet
 		Note note = new Note();
 		note.setTitle(title);
 		note.setContent(content);
+		note.setAddedDate(new Date());
 		synchronized(this)
 		{
 			session.save(note); // saving the note object.
 			session.getTransaction().commit();
 		}
 		session.close();
-		toHomePage(request, response);
+		viewAllNotes(request, response);
+	}
+	
+	private void viewAllNotes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		Session session = Connect.getFactory().openSession();
+		List<Note> notes = session.createQuery("from Note").list();
+		request.setAttribute("allNotes", notes);
+		request.getRequestDispatcher("/WEB-INF/jsp/view/allNotes.jsp").forward(request, response);
+	}
+	
+	private void deleteNote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		int id = Integer.parseInt(request.getParameter("id").trim());
+		Session session = Connect.getFactory().openSession();
+		session.beginTransaction();
+		
+		Query query = session.createQuery("delete from Note where id=:id");
+		query.setParameter("id", id);
+		synchronized(this)
+		{
+			query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		viewAllNotes(request, response);
+	}
+	
+	private void updateNoteForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		System.out.println("Inside the update method.");
+		int id = Integer.parseInt(request.getParameter("id"));
+		Session session = Connect.getFactory().openSession();
+		session.beginTransaction();
+		Note note = session.get(Note.class, id);
+		session.getTransaction().commit();
+		session.close();
+		request.setAttribute("note", note);
+		request.getRequestDispatcher("/WEB-INF/jsp/view/updateNote.jsp").forward(request, response);
 	}
 }

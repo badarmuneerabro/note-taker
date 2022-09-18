@@ -1,5 +1,8 @@
 package com.badar.muneer.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +16,19 @@ public class Note
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int Id;
 	private String title;
-	private String content;
 	
+	@Column(length = 1500)
+	private String content;
+	Date addedDate;
+	
+	public Date getAddedDate() 
+	{
+		return addedDate;
+	}
+	public void setAddedDate(Date addedDate) 
+	{
+		this.addedDate = addedDate;
+	}
 	public int getId() 
 	{
 		return Id;
